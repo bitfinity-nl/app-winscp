@@ -1,0 +1,15 @@
+---
+# Title: app-win-template
+#
+# Author: Luc Rutten
+# File: tasks/uninstall.yml
+#
+# Description:
+#   Install Windows package on Endpoint
+
+- name: "Uninstall package from system"
+  win_package:
+    path: "{{ pkg_uninstaller }}"
+    arguments: "{{ pkg_unarguments }}"
+    product_id: "{{ pkg_product_id }}"
+    state: absent

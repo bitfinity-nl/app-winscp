@@ -1,0 +1,51 @@
+---
+# Title: app-winscp
+#
+# Author: Luc Rutten
+# File: defaults/main.yml
+#
+# Description:
+#   Template for building Ansible Windows applications
+#
+# Howto for private repository:
+#   This role is designed for a controlled environment (e.g. RDS / VDI) with an own (internal)webserver for hosting packages.  
+#
+#   1. Add variable {{ def_ans_repo }} to your group_vars or change it in your playbook or role.
+#   2. Zip all files in 1 file.
+#   3. Upload the file to the web/download server.
+#   4. Edit defaults/main.yml to your needs.
+#   5. Add the role to your playbook.
+
+
+# -- Repository --
+#
+# Variabl(s):
+#   pkg_repository_type     : 'public'                                              # Set repository type to 'public' or 'private' (public is direct from source, private more granular always zip).
+#   pkg_repository_public   : 'https://www.7-zip.org/a/7z1900.exe'                  # Direct url to executable.
+#   pkg_repository_private  : 'http://dl.example.com/resource/7zip/7z1805-x64.zip'  # Remote url to package (needs to be zip file).
+#
+pkg_repository_type    : 'public'
+pkg_repository_public  : 'https://cdn.winscp.net/files/WinSCP-5.15.5-Setup.exe?secure=YmG3mYYOlPxw6_7vK1uUfA==,1574367174'
+pkg_repository_private : 'http://{{ def_ans_rep }}/resources/winscp/WinSCP-5.15.5-Setup.zip'
+
+
+# -- Applications settings --
+#
+# Variable(s)
+#   pkg_state        : 'present' or 'absent'                                 # Whether the application should be installed or removed (present=install, absent=removed).
+#   pkg_name         : '7zip1805-x64'                                        # Name of the application.
+#   pkg_arch         : '32bit' or '64bit'                                    # Whether the application is a 32bit or a 64bit application.
+#   pkg_repo_local   : 'c:\ProgramData\ansible\cached\{{ pkg_name }}'        # Local path to package (Do not change).
+#   pkg_product_id   : '{23170F69-40C1-2702-1805-000001000000}'              # Product can be found in "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" or "HKLM:\SOFTWARE\Wow6432Node\M$
+#   pkg_installer    : '{{ pkg_repo_local }}\7z1805-x64.msi'                 # Executable for the installation.
+#   pkg_arguments    : '/qn'                                                 # Additional Arguments for a silent installation.
+#
+pkg_state        : 'present'
+pkg_name         : 'winscp-5.15.5'
+pkg_arch         : '32bit'
+pkg_repo_local   : 'c:\ProgramData\ansible\cached\{{ pkg_name }}'
+pkg_product_id   : 'winscp3_is1'
+pkg_installer    : '{{ pkg_repo_local }}\WinSCP-5.15.5-Setup.exe'
+pkg_arguments    : '/VERYSILENT'
+pkg_uninstaller  : 'C:/Program Files (x86)/WinSCP/unins000.exe'
+pkg_unarguments  : '/VERYSILENT /NORESTART'

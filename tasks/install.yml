@@ -1,0 +1,46 @@
+---
+# Title: app-winscp
+#
+# Author: Luc Rutten
+# File: tasks/install.yml
+#
+# Description: 
+#   Install Windows package on Endpoint
+
+
+- name: "Create local Ansible repository"
+  win_file:
+    path: "{{ pkg_repo_local }}"
+    state: directory
+
+- name: "Download package from public repository"
+  win_get_url:
+    url: "{{ pkg_repository_public }}"
+    dest: "{{ pkg_installer }}"
+  when: pkg_repository_type == 'public'
+
+- name: "Download package from private repository"
+  win_get_url:
+    url: "{{ pkg_repository_private }}"
+    dest: "{{ pkg_repo_local }}\\{{ pkg_name }}.zip"
+    force: no
+  when: pkg_repository_type == 'private'
+
+- name: "Unzip package from private repository"
+  win_unzip:
+    src: "{{ pkg_repo_local }}\\{{ pkg_name }}.zip"
+    dest: "{{ pkg_repo_local }}"
+  when: pkg_repository_type == 'private'
+
+- name: "Installing {{ pkg_name }}"
+  win_package:
+    path: "{{ pkg_installer }}"
+    product_id: "{{ pkg_product_id }}"
+    arguments: "{{ pkg_arguments }}"
+    state: present
+
+- name: "Removing installation files"
+  win_file:
+    path: "{{ pkg_repo_local }}"
+    state: absent
+

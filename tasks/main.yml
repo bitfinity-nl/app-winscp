@@ -1,0 +1,33 @@
+---
+# Title: app-win-template
+#
+# Author: Luc Rutten
+# File: tasks/main.yml
+#
+# Description:
+#   Install Windows package on Endpoint
+
+- name: "Install 32bit package when state is present"
+  import_tasks: 32bit-check.yml
+  when:
+    - ansible_os_family == "Windows"
+    - pkg_state == "present"
+    - pkg_arch == "32bit"
+
+- name: "Install 64bit package when state is present"
+  import_tasks: 64bit-check.yml
+  when:
+    - ansible_os_family == "Windows"
+    - pkg_state == "present"
+    - pkg_arch == "64bit"
+
+- name: "import tasks/additional-tasks.yml"
+  import_tasks: additional-tasks.yml
+  when:
+    - ansible_os_family == "Windows"
+
+- name: "Uninstall package when state is absent"
+  import_tasks: uninstall.yml
+  when:
+    - ansible_os_family == "Windows"
+    - pkg_state == "absent"

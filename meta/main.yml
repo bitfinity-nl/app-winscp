@@ -1,0 +1,17 @@
+galaxy_info:
+  author: L. Rutten
+  description: This role is a Template for building Ansible roles to deploy Windows applications.
+  company: Bitfinity-NL
+  license: GPLv3
+  min_ansible_version: 2.4
+  platforms:
+  - name: Windows
+    versions:
+    - 7
+    - 2008r2
+    - or higher
+  galaxy_tags:
+    - desktop
+    - applications
+    - windows
+    - deployment
